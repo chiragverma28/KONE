@@ -1,0 +1,239 @@
+<apex:page standardController="Case" extensions="ctrlMI_CaseExtension" action="{!updatecaseDetails}" showHeader="true" sidebar="true" >
+
+    <apex:form id="myForm">
+        <apex:sectionHeader title="Case" subtitle="New Case(Market intelligence)"/>
+        <apex:pageBlock id="pgBlock">
+            <apex:pageBlockButtons location="both">
+                <apex:commandButton value="Save" action="{!Save}" immediate="false"/>
+
+                <apex:commandButton value="Cancel" action="{!Cancel}"/>
+            </apex:pageBlockButtons>
+            
+            <!-------------------------New modification--------------------------------------------------------->  
+        <apex:pageBlockSection id="pgBlockSectionRequestorDetails1" title="Requester Details Deep Dive" collapsible="false" columns="2" rendered="{!$User.Username!='himanshu_saxena02@infosys.com'}" >
+                <apex:pageBlockSectionItem >
+                
+                    <apex:outputLabel >Requestor Name:</apex:outputLabel>                    
+                    <apex:outputText id="requesterName" value="{!$User.FirstName+' '+$User.LastName}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel >Requestor MUD ID:</apex:outputLabel>                    
+                    <apex:outputText id="requesterMudId" value="{!$User.Requester_MUD_ID__c}" />
+                </apex:pageBlockSectionItem>
+                
+                <apex:pageBlockSectionItem >
+                   <apex:outputLabel >Requestor Email ID:</apex:outputLabel>                    
+                   <apex:outputText id="requesteremaildu" value="{!$User.Email}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel >Department:</apex:outputLabel>                    
+                    <apex:outputText id="department" value="{!$User.Department__c}" />
+               </apex:pageBlockSectionItem>
+                </apex:pageBlockSection> 
+    
+    
+   
+    
+    <!-----------------------First Page Block Section---------------------------------->
+             <apex:pageBlockSection id="pgBlockSectionRequestorDetails" title="Requester Details" collapsible="false" columns="2" rendered="{!$User.Username=='himanshu_saxena02@infosys.com'}">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel >Requestor Name:</apex:outputLabel> 
+                    <apex:inputField id="requesterName" value="{!case.Requestor_Name__c}" required="true" />                   
+                    
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel >Requestor MUD ID:</apex:outputLabel>                    
+                    <apex:inputField id="requesterMudId" value="{!case.Requester_MUD_ID__c}" required="true" />
+                </apex:pageBlockSectionItem>
+                
+                <apex:pageBlockSectionItem >
+                   <apex:outputLabel >Requestor Email ID:</apex:outputLabel>                    
+                   <apex:inputField id="requesteremaildu" value="{!case.Requester_Email_ID__c}" required="true" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel >Department:</apex:outputLabel>                    
+                    <apex:inputField id="department" value="{!case.Department__c}" required="true"/>
+               </apex:pageBlockSectionItem>
+                </apex:pageBlockSection>
+           
+          
+      <!-------------------------------------Second Page Block-------------------------------->
+          <apex:pageBlockSection id="pgBlockSectionRequirementDetails" title="Requirement Details" collapsible="false" columns="2">
+                <apex:pageBlockSectionItem >
+                
+                    <apex:outputLabel >Request Type:</apex:outputLabel> 
+                    <apex:actionregion >
+                    <apex:inputField id="requesttype" value="{!case.Request_Type__c}" required="true">                   
+                    <apex:actionSupport event="onchange" reRender="deleiveryform,form2,reqdetails"/>
+                </apex:inputField>
+                   </apex:actionregion>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel >Business Unit:</apex:outputLabel>                    
+                    <apex:inputField id="BU" value="{!case.Business_Unit__c}" required="true" />
+                </apex:pageBlockSectionItem>
+                
+                <apex:pageBlockSectionItem >
+                   <apex:outputLabel >Category:</apex:outputLabel> 
+                   <apex:actionregion >                   
+                   <apex:inputField id="catgory" value="{!case.Category__c}" required="true">
+                   <apex:actionSupport event="onchange" reRender="othrcategory,othrsubcategory"/>
+                </apex:inputField>
+                   </apex:actionregion>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel >Sub category:</apex:outputLabel>
+                    <apex:actionregion >                    
+                    <apex:inputField id="subcat" value="{!case.Sub_category__c}" required="true">
+                    <apex:actionSupport event="onchange" reRender="othrcategory"/>
+                </apex:inputField>
+                   </apex:actionregion>
+               </apex:pageBlockSectionItem>
+               </apex:pageblocksection>
+               
+               <apex:outputPanel id="othrcategory">
+               <apex:pageBlockSection >
+               <apex:pageBlockSectionItem rendered="{!case.Category__c=='Not in the list'}">
+                   <apex:outputLabel >Other Category:</apex:outputLabel>                    
+                   <apex:inputField id="othercatgory" value="{!case.Category_Text__c}" required="true" />
+                </apex:pageBlockSectionItem>
+               
+               <apex:pageBlockSectionItem rendered="{!case.Sub_category__c=='Not in the list'||case.Category__c=='Not in the list'}">
+                    <apex:outputLabel >Other Sub category:</apex:outputLabel>                    
+                    <apex:inputField id="subcat" value="{!case.Sub_category_Text__c}" required="true"/>
+               </apex:pageBlockSectionItem>
+               </apex:pageBlockSection>
+              </apex:outputPanel>
+              
+               <apex:pageBlockSection >
+               <apex:pageBlockSectionItem >
+                    <apex:outputLabel >Proposed Start Date:</apex:outputLabel> 
+                    <apex:inputField id="strtdate" value="{!case.Proposed_Start_Date__c}" required="true" />                   
+                    
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel >Proposed End Date:</apex:outputLabel>                    
+                    <apex:inputField id="enddate" value="{!case.Proposed_End_Date__c}" required="true" />
+                </apex:pageBlockSectionItem>
+                
+                </apex:pageBlockSection>
+       <!------------------------------------Third Page Block+Word form fields--------------------------------->  
+       <Apex:outputPanel id="reqdetails">
+           <apex:pageBlockSection rendered="{!case.Request_Type__c=='Quick Turnaround'}">
+               <apex:pageBlockSectionItem >
+                    <apex:outputLabel >Please provide the request details :</apex:outputLabel> 
+                    <apex:inputField id="reqdet" value="{!case.Requestor_details__c}" required="true" />                   
+                    
+                </apex:pageBlockSectionItem>
+       </apex:pageBlockSection>
+       </apex:outputPanel>
+
+       
+       <Apex:outputPanel id="deleiveryform">
+           <apex:pageBlockSection rendered="{!case.Request_Type__c=='Deep Dive'}">
+               <apex:pageBlockSectionItem >
+                    <apex:outputLabel >Delivery Format:</apex:outputLabel> 
+                    <apex:inputField id="dlvryfrmt" value="{!case.Delivery_Format__c}" required="true" />                   
+                    
+                </apex:pageBlockSectionItem>
+               
+       </apex:pageBlockSection>
+        <!----------------------------------------------------------------------------------->
+       <apex:pageBlockSection id="researchform" title="RESEARCH REQUEST FORM" collapsible="false" columns="2" rendered="{!case.Request_Type__c=='Deep Dive'}">
+              
+                <apex:pageBlockSectionItem helpText="Detail the current situation. E.g. Marketing print spend is fragmented with numerous suppliers.What are the current challenges that are faced in managing this category? E.g. low spend under management; poor spend visibility, etc.">
+                    <apex:outputLabel >Project background</apex:outputLabel>                    
+                    <apex:inputField id="pb" value="{!case.Brief_background_for_project_requiremnt__c}" required="true" />
+                </apex:pageBlockSectionItem>
+               
+               <apex:pageBlockSectionItem helpText="What do you hope to achieve through this project? What are the key objectives?Please select from the list:">
+                    <apex:outputLabel >Project Objective:</apex:outputLabel> 
+                    <apex:actionRegion >
+                    <apex:inputField id="requestorName" value="{!case.Project_Objective__c}" required="true">
+                    <apex:actionSupport event="onchange" reRender="otherObjective"/> 
+                    </apex:inputField>                  
+                    </apex:actionRegion>
+                    
+                </apex:pageBlockSectionItem>
+                <Apex:pageBlockSectionItem ></Apex:pageBlockSectionItem>
+                </apex:pageBlockSection>
+                
+                <apex:outputPanel id="otherObjective">
+                <apex:pageBlockSection rendered="{!Contains(case.Project_Objective__c,'Others')}">
+                <apex:pageBlockSectionItem >
+                <apex:outputLabel >Other objectives:</apex:outputLabel>                    
+                    <apex:inputField id="others" value="{!case.OtherObjectives__c}" required="true" />
+                
+                </apex:pageBlockSectionItem>
+                
+                </apex:pageBlockSection>
+                </apex:outputPanel>
+                <apex:pageBlockSection rendered="{!case.Request_Type__c=='Deep Dive'}">
+                <apex:pageBlockSectionItem >
+                <apex:outputLabel style="font-weight: bold;">Project Description</apex:outputLabel>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem ></apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel >Please list the top 3-5 business questions that need to be answered? :</apex:outputLabel>                    
+                    <apex:inputField id="topquestions" value="{!case.Top_3_5_business_questions__c}" required="true" />
+                </apex:pageBlockSectionItem>
+       
+       <apex:pageBlockSectionItem >
+                    <apex:outputLabel >Are there any hypotheses that you would like us to confirm?:</apex:outputLabel> 
+                    <apex:inputField id="hypotheses" value="{!case.Are_there_any_hypotheses__c}" required="true" />                   
+                    
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem helpText="Is there any additional information that you already have, which can be shared - so that we do not duplicate work?" >
+                    <apex:outputLabel >Additional information:</apex:outputLabel>                    
+                    <apex:inputField id="addinfo" value="{!case.Is_there_any_additional_information__c}" required="true" />
+                    
+                </apex:pageBlockSectionItem>
+                </apex:pageBlockSection>
+                <!------------------------------seperation-------------->
+                <apex:pageBlockSection rendered="{!case.Request_Type__c=='Deep Dive'}">
+                <apex:pageBlockSectionItem >
+                <apex:outputLabel style="font-weight: bold;">Research Scope and Category Inputs</apex:outputLabel>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem ></apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                <apex:outputLabel >Geographic scope:</apex:outputLabel>                    
+                    <apex:inputField id="spendsubcat" value="{!case.geographic_scope_of_the_project__c}" required="true" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                <apex:outputLabel >Anything that is out of the research scope?</apex:outputLabel>                    
+                    <apex:inputField id="researchscope" value="{!case.Anything_that_is_out_of_the_research_sco__c}" required="true" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                <apex:outputLabel >What is the total spend of the category/sub-category?</apex:outputLabel>                    
+                    <apex:inputField id="totalspendcat" value="{!case.Total_spend_of_the_category_sub_category__c}" required="true" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                <apex:outputLabel >Who are the incumbent suppliers? Please list the key incumbents.</apex:outputLabel>                    
+                    <apex:inputField id="incumsuppliers" value="{!case.Who_are_the_incumbent_suppliers__c}" required="true" />
+                </apex:pageBlockSectionItem>
+       </apex:pageBlockSection>
+       <!-----------------sep-------------->
+       <apex:pageBlockSection rendered="{!case.Request_Type__c=='Deep Dive'}">
+                <apex:pageBlockSectionItem >
+                <apex:outputLabel style="font-weight: bold;">Other Specifications:</apex:outputLabel>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem ></apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem helpText="Information gathered through interactions with suppliers & industry experts">
+                <apex:outputLabel >Do you want this report to include inputs from primary research?</apex:outputLabel>                    
+                    <apex:inputField id="spendsubcat" value="{!case.Do_you_want_this_report__c}" required="true" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                <apex:outputLabel >If yes, can we disclose GSK’s name during supplier interactions?</apex:outputLabel>                    
+                    <apex:inputField id="disclosegsk" value="{!case.can_we_disclose_GSK_s__c}" required="true" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                <apex:outputLabel >Any other aspects that we need to be aware of?</apex:outputLabel>                    
+                    <apex:inputField id="otheraspects" value="{!case.Any_other_aspects_that_we_need_to_be_awa__c}" required="true" />
+                </apex:pageBlockSectionItem>
+      
+           </apex:pageBlockSection>     
+       </apex:outputPanel>
+       <!--------------------------------------------------------------------------------------------------------->
+        </apex:pageBlock>
+         </apex:form>
+       </apex:page>

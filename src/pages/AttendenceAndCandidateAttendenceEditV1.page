@@ -1,0 +1,35 @@
+<apex:page standardController="Attendence__c"
+           extensions="AttendenceEditExtensionV1"
+           tabStyle="Attendence__c" title="Prototype Attendence Edit">
+    <apex:pageMessages />
+    <apex:form >
+        <apex:pageBlock mode="mainDetail">
+            <apex:pageBlockButtons >
+                <apex:commandButton action="{!cancel}" value="Exit" />
+                <apex:commandButton action="{!save}" value="Save" />
+            </apex:pageBlockButtons>
+            <apex:repeat value="{!$ObjectType.Attendence__c.fieldSets}">
+            </apex:repeat>
+            <apex:pageBlockSection title="Attendence Details" collapsible="true" id="mainRecord" columns="2" >          
+                  
+                    <apex:outputField value="{!Attendence__c.Class__c}"/>
+                    
+            </apex:pageBlockSection>
+           <apex:outputPanel id="Cat"> 
+                <apex:repeat value="{!Cat}" var="Candidate_Attendence__c" >
+                    <apex:pageBlockSection columns="1"  title="Student {!Candidate_Attendence__c.Name}" collapsible="true">
+                        <apex:pageBlockSectionItem >
+                              <apex:pageBlockSection columns="2">
+                                <apex:outputField value="{!Candidate_Attendence__c.Contact__c}"/>
+                                <apex:inputField value="{!Candidate_Attendence__c.Present__c}"/>
+                              </apex:pageBlockSection>
+                           </apex:pageBlockSectionItem>
+                        </apex:pageBlockSection>
+                </apex:repeat>
+            </apex:outputPanel>
+             
+       </apex:pageBlock>
+    </apex:form>        
+ 
+   
+</apex:page>

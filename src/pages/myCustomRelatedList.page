@@ -1,0 +1,8 @@
+<apex:page standardController="Attendence__c">
+    
+    <apex:pageBlock mode="inlineEdit">
+    <apex:relatedList list="Candidate_Attendence__r" />
+    
+    </apex:pageBlock>
+    
+</apex:page>
