@@ -1,0 +1,337 @@
+<apex:page standardController="Case" showHeader="true" sidebar="true" >
+    <apex:form id="myForm">
+        <apex:sectionHeader title="Case Edit" subtitle="New Case"/>
+        <apex:pageBlock id="pgBlock" title="Case Edit">
+            <apex:pageBlockButtons location="both">
+                <apex:commandButton value="Save" action="{!Save}" immediate="false" />
+                <apex:commandButton value="Cancel" action="{!Cancel}" immediate="false"/>
+            </apex:pageBlockButtons>
+    
+    <!-----------------------First Page Block Section---------------------------------->
+             <apex:pageBlockSection id="pgBlockSectionRequestorDetails" title="Requester Details" collapsible="false" columns="2" rendered="{!$User.Username=='himanshu_saxena02@infosys.com'}">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel >Requester Name:</apex:outputLabel> 
+                    <apex:inputField id="requesterName" value="{!case.Requestor_Name__c}" required="true" />                   
+                    
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel >Requester MUD ID:</apex:outputLabel>                    
+                    <apex:inputField id="requesterMudId" value="{!case.Requester_MUD_ID__c}" required="true" />
+                </apex:pageBlockSectionItem>
+                
+                <apex:pageBlockSectionItem >
+                   <apex:outputLabel >Requester Email ID:</apex:outputLabel>                    
+                   <apex:inputField id="requesteremaildu" value="{!case.Requester_Email_ID__c}" required="true" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel >Department:</apex:outputLabel>                    
+                    <apex:inputField id="department" value="{!case.Department__c}" required="true"/>
+               </apex:pageBlockSectionItem>
+                </apex:pageBlockSection>
+                
+        <!-------------------------New modification--------------------------------------------------------->     
+        <apex:pageBlockSection id="pgBlockSectionRequestorDetails1" title="Requester Details" collapsible="false" columns="2" rendered="{!$User.Username!='himanshu_saxena02@infosys.com'}" >
+                <apex:pageBlockSectionItem >
+                
+                    <apex:outputLabel >Requester Name:</apex:outputLabel>                    
+                    <apex:outputText id="requesterName" value="{!$User.FirstName+' '+$User.LastName}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel >Requester MUD ID:</apex:outputLabel>                    
+                    <apex:outputText id="requesterMudId" value="{!$User.Requester_MUD_ID__c}" />
+                </apex:pageBlockSectionItem>
+                
+                <apex:pageBlockSectionItem >
+                   <apex:outputLabel >Requester Email ID:</apex:outputLabel>                    
+                   <apex:outputText id="requesteremaildu" value="{!$User.Email}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel >Department:</apex:outputLabel>                    
+                    <apex:outputText id="department" value="{!$User.Department__c}" />
+               </apex:pageBlockSectionItem>
+                </apex:pageBlockSection>
+                
+     <!----------------------------------2nd page block Section-------------------------------------------------->              
+                
+        <apex:pageBlockSection id="pgblockCaseInfirmation" title="Case Information" collapsible="false" columns="2" >   
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel >Purchase Requisition (PR) Reference/Shop</apex:outputLabel>                    
+                <apex:inputField id="prName" value="{!Case.Purchase_Requisition_PR_Reference_Shop__c}" required="true" />
+              </apex:pageBlockSectionItem>
+        <apex:pageBlockSectionItem >
+                <apex:outputLabel >Is PR Approved</apex:outputLabel>                    
+                
+                 <apex:inputField id="isPrApproved" value="{!Case.Is_PR_Approved__c}" required="true" />
+                
+                
+              </apex:pageBlockSectionItem>
+        
+              
+        <apex:pageBlockSectionItem >
+                <apex:outputLabel >Geography</apex:outputLabel>                    
+                <apex:inputField id="geo" value="{!Case.Origin}" required="true"/>
+          </apex:pageBlockSectionItem> 
+          
+        
+        <apex:pageBlockSectionItem >
+                <apex:outputLabel >Status</apex:outputLabel> 
+                <apex:actionRegion >                   
+                <apex:inputField id="Status" value="{!Case.Status}" required="true">
+                <apex:actionSupport event="onchange" reRender="caseclosure"/>
+                </apex:inputfield>
+                </apex:actionRegion>
+          </apex:pageBlockSectionItem> 
+          
+          
+          <apex:pageBlockSectionItem >
+                <apex:outputLabel >Request Complexity</apex:outputLabel> 
+                <apex:actionregion >                   
+                <apex:inputField id="reqComlexity" value="{!Case.Priority}" required="true">
+                <apex:actionSupport event="onchange" reRender="ReqComplex"/>
+                </apex:inputField>
+               </apex:actionregion>
+              </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+        
+        <apex:outputPanel id="ReqComplex">
+        <apex:pageBlockSection >
+        <apex:pageBlockSectionItem rendered="{!Case.Priority=='High'}">
+                <apex:outputLabel >Justification For High Priority &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp; </apex:outputLabel>                    
+                <apex:inputField id="JFHP" value="{!Case.Justification_For_High_Priority__c}" />
+        </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+        </apex:outputPanel>
+    
+     
+     <!------------------------ 3rd page Block Section----------------------->
+     <apex:pageBlockSection id="details" title="Product / Service Details" collapsible="false" columns="2" >   
+     <apex:pageBlockSectionItem >
+                <apex:outputLabel >What Do You Need To Procure</apex:outputLabel>  
+             <apex:actionregion >   
+                 <apex:inputField id="proc" value="{!Case.What_do_you_need_to_procure__c}" required="true" >
+                <apex:actionSupport event="onchange" reRender="services, product"/>
+                </apex:inputField>
+               </apex:actionregion>          
+                
+       </apex:pageBlockSectionItem>
+       <apex:pageBlockSectionItem >
+                <apex:outputLabel >Category</apex:outputLabel>                    
+                <apex:inputField id="categ" value="{!Case.Category__c}" required="true" />
+       </apex:pageBlockSectionItem>
+       <apex:pageBlockSectionItem >
+                <apex:outputLabel >Product / Goods description</apex:outputLabel>
+                <apex:inputField id="proct" value="{!Case.Product_Service_Description__c}" />
+       </apex:pageBlockSectionItem>
+       <apex:pageBlockSectionItem >
+                <apex:outputLabel >Sub Category</apex:outputLabel>                    
+                <apex:inputField id="subcateg" value="{!Case.Sub_category__c}" required="true"/>
+       </apex:pageBlockSectionItem>
+       <apex:pageBlockSectionItem >
+                <apex:outputLabel >Product Category Id</apex:outputLabel>                    
+                <apex:inputField id="prodcutid" value="{!Case.Product_Category_Id__c}" />
+       </apex:pageBlockSectionItem>
+       <apex:pageBlockSectionItem >
+               <apex:outputLabel >Preferred Supplier</apex:outputLabel>
+                <apex:actionregion >                    
+                    <apex:inputField id="supplier" value="{!Case.Supplier__c}" required="true">
+                        <apex:actionSupport event="onchange" reRender="NPS, supplierstatus, commentssection"/>
+                    </apex:inputField>
+                </apex:actionregion> 
+       </apex:pageBlockSectionItem>
+       <apex:pageBlockSectionItem >
+                <apex:outputLabel >Currency</apex:outputLabel>                    
+                <apex:inputField id="Currency" value="{!Case.Currency__c}" />
+       </apex:pageBlockSectionItem>
+       <apex:pageBlockSectionItem >
+                <apex:outputLabel >Is the Supplier an approved/preferred one</apex:outputLabel>  
+                <apex:inputField id="preffedsupp" value="{!Case.Is_the_Supplier_an_approved_preferred_on__c}" required="true" />
+                   
+       </apex:pageBlockSectionItem>
+       <apex:pageBlockSectionItem >
+                <apex:outputLabel >Budgeted Spend</apex:outputLabel>                    
+                <apex:inputField id="budget" value="{!Case.Budget_Spend__c}" required="true"/>
+       </apex:pageBlockSectionItem>
+       </apex:pageBlockSection>
+       
+       <!---------------------------------------Non Preferred Supplier section--------------------------------------->
+       
+       <apex:outputpanel id="NPS">
+       <apex:pageBlockSection >
+        <apex:pageBlockSectionItem rendered="{!case.Supplier__c=='Not in the list'}">
+                <apex:outputLabel >Non Preffered Supplier</apex:outputLabel>                    
+                <apex:inputField id="nonpreffedsupp" value="{!Case.Non_Preffered_Supplier__c}" required="{!case.Supplier__c=='Not in the list'}"/>
+       </apex:pageBlockSectionItem>
+       <apex:pageBlockSectionItem rendered="{!case.Supplier__c!=''}">
+                <apex:outputLabel >Supplier Email</apex:outputLabel>                    
+                <apex:inputField id="emailSuuplier" value="{!Case.Supplier_Email__c}" required="true" />
+       </apex:pageBlockSectionItem>
+       </apex:pageBlockSection>
+       
+       </apex:outputPanel>
+       
+       <!-----------------------------------------------rendering section------------------------------->
+       <apex:outputpanel id="product">
+       <apex:pageblocksection >
+       <apex:pageBlockSectionItem rendered="{!Case.What_do_you_need_to_procure__c=='Product / Goods'}">
+                <apex:outputLabel >Quantity of Items (if Product)</apex:outputLabel>                    
+                <apex:inputField id="quantity" value="{!Case.Quantity_of_Items__c}" required="true"/>
+       </apex:pageBlockSectionItem>
+       <apex:pageBlockSectionItem id="output" rendered="{!Case.What_do_you_need_to_procure__c=='Product / Goods'}">
+                <apex:outputLabel value="Delivery Date (if Product)" >
+                </apex:outputLabel>  
+                
+                <apex:inputField id="deliverydate" value="{!Case.Delivery_Date__c}" required="true"  />
+                
+     </apex:pageBlockSectionItem>
+      </apex:pageBlockSection>
+     </apex:outputpanel>
+    
+    <!------------------------------Rendering PageBlockSection-------------------------------->
+     <apex:outputPanel id="services">
+     <apex:pageBlockSection >
+       <apex:pageBlockSectionItem rendered="{!Case.What_do_you_need_to_procure__c=='Services'}">
+                <apex:outputLabel >Actual Start Date</apex:outputLabel>                    
+                <apex:inputField id="startDate" value="{!Case.Actual_Start_Date__c}" required="true" />
+       </apex:pageBlockSectionItem>
+       <apex:pageBlockSectionItem rendered="{!Case.What_do_you_need_to_procure__c=='Services'}">
+                <apex:outputLabel >Actual End Date</apex:outputLabel>                    
+                <apex:inputField id="enddate" value="{!Case.Actual_End_Date__c}" required="true" />
+       </apex:pageBlockSectionItem>
+       </apex:pageBlockSection>
+       </apex:outputPanel>
+       
+       <!--------------------Rendering Section--------------------------->
+       
+       <apex:outputPanel id="supplierstatus">
+       <apex:pageBlockSection rendered="{!case.Supplier__c=='Not in the list'}">
+       <apex:pageBlockSectionItem >
+                <apex:outputLabel >Commitment Of Spend </apex:outputLabel> 
+                <apex:actionRegion >                   
+                <apex:inputField id="commitment" value="{!Case.Commitment_Made_By_Supplier__c}" required="true">
+                <apex:actionSupport event="onchange" reRender="supplierstatus1"/>
+                </apex:inputField>
+                </apex:actionRegion>
+       </apex:pageBlockSectionItem>
+       <apex:pageBlockSectionItem >
+                <apex:outputLabel >Is there a contract/rate card</apex:outputLabel>                    
+                <apex:inputField id="contractcard" value="{!Case.Is_there_a_contract_rate_card__c}" />
+       </apex:pageBlockSectionItem>
+       </apex:pageBlockSection>
+    </apex:outputPanel>
+       <apex:outputPanel id="supplierstatus1">
+       <apex:pageBlockSection rendered="{!Case.Commitment_Made_By_Supplier__c=='Yes'}">
+       <apex:pageBlockSectionItem id="pgBlocksection3" >
+                <apex:outputLabel >Justification for pre commitment to supplier</apex:outputLabel>   
+                            
+                <apex:inputField id="justification" value="{!Case.Customer_justification_comme__c}" required="true"/>
+                  
+       </apex:pageBlockSectionItem>
+       
+     </apex:pageBlockSection>
+    </apex:outputPanel>
+    <apex:outputPanel id="commentssection">
+       <apex:pageBlockSection rendered="{!case.Supplier__c!=''}">
+       <apex:pageBlockSectionItem >
+                <apex:outputLabel >Additional Comments</apex:outputLabel>   
+                            
+                <apex:inputField id="addcomments" value="{!Case.Comments__c}" />
+                  
+       </apex:pageBlockSectionItem>
+       
+     </apex:pageBlockSection>
+    </apex:outputPanel>
+    
+    <!--------------------------------------------------4th PageblockSection--------------------------------->
+    
+    <apex:pageBlockSection id="flowInformation" title="Work Flow information" collapsible="false" columns="2" rendered="{!$User.Username=='himanshu_saxena02@infosys.com'}">
+   
+     <apex:pageBlockSectionItem >
+                <apex:outputLabel >Request originated from</apex:outputLabel>  
+             <apex:actionregion >   
+                 <apex:inputField id="reqOrgfrom" value="{!case.Request_originated_from__c}">
+                <apex:actionSupport event="onchange" reRender="services, product"/>
+                </apex:inputField>
+               </apex:actionregion>          
+                
+       </apex:pageBlockSectionItem>
+       <apex:pageBlockSectionItem >
+                <apex:outputLabel >Budget Holder</apex:outputLabel>                    
+                <apex:inputField id="BudgtHoldr" value="{!Case.Budget_Holder__c}" />
+       </apex:pageBlockSectionItem>
+       <apex:pageBlockSectionItem >
+                <apex:outputLabel >Delivery Location</apex:outputLabel>
+                <apex:inputField id="DelvryLocatn" value="{!Case.Delivery_Location__c}" />
+       </apex:pageBlockSectionItem>
+       <apex:pageBlockSectionItem >
+                <apex:outputLabel >MUD ID</apex:outputLabel>                    
+                <apex:inputField id="mudID" value="{!Case.MUD_ID__c}" />
+       </apex:pageBlockSectionItem>
+       <apex:pageBlockSectionItem >
+                <apex:outputLabel >Is customer willing for PSL conversion</apex:outputLabel> 
+                <apex:actionRegion >                    
+                <apex:inputField id="PSLCovrsn" value="{!Case.Is_customer_willing_for_PSL_conversion__c}">
+                <apex:actionSupport event="onchange" reRender="convert"/> </apex:inputField>
+                </apex:actionRegion>
+       </apex:pageBlockSectionItem>
+                     <apex:pageBlockSectionItem >
+                <apex:outputLabel >Managed to convert to PSL</apex:outputLabel>
+                <apex:inputField id="convertPSL" value="{!Case.Managed_to_convert_to_PSL__c}" />
+       </apex:pageBlockSectionItem>
+       </apex:pageBlockSection>
+       <apex:outputPanel id="convert" >
+<apex:pageBlockSection rendered="{!$User.Username=='himanshu_saxena02@infosys.com'}">
+
+       <apex:pageBlockSectionItem rendered="{!Case.Is_customer_willing_for_PSL_conversion__c!='Yes'||Case.Is_customer_willing_for_PSL_conversion__c!='' }" >
+                <apex:outputLabel >customer justification/comments to be provided</apex:outputLabel>                    
+                <apex:inputField id="justificationcomments" value="{!Case.Customer_justification_comme__c}" required="{!Case.Is_customer_willing_for_PSL_conversion__c!='Yes'}" />
+       </apex:pageBlockSectionItem>
+       </apex:pageblocksection>
+       </apex:outputPanel>
+<apex:pageBlockSection rendered="{!$User.Username=='himanshu_saxena02@infosys.com'}">
+
+       <apex:pageBlockSectionItem >
+                <apex:outputLabel >Supplier selcted for requisiition</apex:outputLabel>  
+                <apex:inputField id="supplierrequisition" value="{!Case.Supplier_selcted_for_requisiition__c}"/>
+                   
+       </apex:pageBlockSectionItem>
+       <apex:pageBlockSectionItem >
+                <apex:outputLabel >Item Catalog able</apex:outputLabel>                    
+                <apex:inputField id="Itemcatalog" value="{!Case.Item_Catalog_able__c}" />
+       </apex:pageBlockSectionItem>
+       <apex:pageBlockSectionItem >
+                <apex:outputLabel >Final Req value</apex:outputLabel>                    
+                <apex:inputField id="finalreq" value="{!Case.Final_Req_value__c}" />
+       </apex:pageBlockSectionItem>
+       <apex:pageBlockSectionItem >
+                <apex:outputLabel >Request pending with</apex:outputLabel>  
+                <apex:inputField id="Pendingrequest" value="{!Case.Request_pending_with__c}"/>
+                   
+       </apex:pageBlockSectionItem>
+       <apex:pageBlockSectionItem >
+                <apex:outputLabel >Savings achieved</apex:outputLabel>                    
+                <apex:inputField id="savings" value="{!Case.Savings_achieved__c}" />
+       </apex:pageBlockSectionItem>
+       <apex:outputPanel ></apex:outputPanel>
+       <apex:pageBlockSectionItem >
+                <apex:outputLabel >Savings in percentage</apex:outputLabel>  
+                <apex:inputField id="savingsinpercent" value="{!Case.Savings_in_percentage__c}"/>
+                   
+       </apex:pageBlockSectionItem>
+       <apex:outputPanel ></apex:outputPanel>
+       <apex:pageBlockSectionItem >
+                <apex:outputLabel >Value in GBP</apex:outputLabel>                    
+                <apex:inputField id="valuesinGBP" value="{!Case.value_in_GBP__c}" />
+       </apex:pageBlockSectionItem>
+       
+       </apex:pageBlockSection>
+       <apex:outputpanel id="caseclosure">
+<apex:pageBlockSection rendered="{!$User.Username=='himanshu_saxena02@infosys.com'}">
+<apex:pageBlockSectionItem rendered="{!Case.Status=='Closed'}">
+                <apex:outputLabel >Case closure comments</apex:outputLabel>                    
+                <apex:inputField id="closecomments" value="{!Case.Case_Closure_comments__c}" required="true"/>
+       </apex:pageBlockSectionItem>
+</apex:pageBlockSection>
+</apex:outputpanel>
+       </apex:pageBlock>
+     </apex:form>
+ </apex:page>

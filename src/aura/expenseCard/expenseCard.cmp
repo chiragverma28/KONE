@@ -1,0 +1,52 @@
+<aura:component >
+
+    <!-- Attribute for the card's expense record -->
+    <!-- TODO: Substitute your org's namespace -->
+    <aura:attribute name="expense" type="Expense__c" />
+    
+    <!-- Color the item red if the expense is not approved, else color it green -->
+    <!-- TODO: Substitute your org's namespace -->
+    <div class="{!v.expense.simple_school__Approved__c == true
+               ? 'listRecord recordLayout green' : 'listRecord recordLayout red'}">
+        
+        <!-- An anchor tag is for handling a click on the item for a navigation action - not in use -->
+        <a aura:id="expense" >
+
+            <div class="itemTitle">
+                <ui:outputText value="{!v.expense.name}"/>
+            </div>
+
+            <div class="hr"></div>
+            
+            <div class="recordItem">Amount:
+                <!-- TODO: Substitute your org's namespace -->
+                <ui:outputNumber value="{!v.expense.simple_school__Amount__c}" format=".00"/>
+            </div>
+
+            <div class="recordItem">Client:
+                <!-- TODO: Substitute your org's namespace -->
+                <ui:outputText value="{!v.expense.simple_school__Client__c}"/>
+            </div>
+
+            <div class="recordItem">Date:
+                <!-- TODO: Substitute your org's namespace -->
+                <ui:outputDateTime value="{!v.expense.simple_school__Date__c}" />
+            </div>
+
+            <div class="recordItem">Reimbursed?
+                <!-- TODO: Substitute your org's namespace -->
+                <ui:inputCheckbox value="{!v.expense.simple_school__Reimbursed__c}" disabled="true"/>
+            </div>
+           
+            <!-- This is the only editable field with an event handler-->
+            <div class="recordItem">Approved?
+
+                <!-- onChange call the event handler function in the controller -->
+                <!-- TODO: Substitute your org's namespace in the ui:inputCheckbox on line 48-->
+                <ui:inputCheckbox value="{!v.expense.simple_school__Approved__c}" />
+
+            </div>
+
+        </a>
+    </div>
+</aura:component>

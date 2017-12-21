@@ -1,0 +1,162 @@
+<apex:page standardController="Case" showHeader="true" sidebar="true" id="form1" >
+    <apex:form id="myForm">
+        <apex:sectionHeader title="Case" subtitle="New Case(QT)"/>
+        <apex:pageBlock id="pgBlock" title="Case Edit">
+            <apex:pageBlockButtons location="both">
+                <apex:commandButton value="Save" action="{!Save}" immediate="false" />
+                <apex:commandButton value="Cancel" action="{!Cancel}"/>
+            </apex:pageBlockButtons>
+            
+            <!-------------------------New modification--------------------------------------------------------->  
+        <apex:pageBlockSection id="pgBlockSectionRequestorDetails1" title="Requester Details Deep Dive" collapsible="false" columns="2" rendered="{!$User.Username!='himanshu_saxena02@infosys.com'}" >
+                <apex:pageBlockSectionItem >
+                
+                    <apex:outputLabel >Requestor Name:</apex:outputLabel>                    
+                    <apex:outputText id="requesterName" value="{!$User.FirstName+' '+$User.LastName}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel >Requestor MUD ID:</apex:outputLabel>                    
+                    <apex:outputText id="requesterMudId" value="{!$User.Requester_MUD_ID__c}" />
+                </apex:pageBlockSectionItem>
+                
+                <apex:pageBlockSectionItem >
+                   <apex:outputLabel >Requestor Email ID:</apex:outputLabel>                    
+                   <apex:outputText id="requesteremaildu" value="{!$User.Email}" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel >Department:</apex:outputLabel>                    
+                    <apex:outputText id="department" value="{!$User.Department__c}" />
+               </apex:pageBlockSectionItem>
+                </apex:pageBlockSection> 
+    
+    <!-----------------------First Page Block Section---------------------------------->
+             <apex:pageBlockSection id="pgBlockSectionRequestorDetails" title="Requester Details" collapsible="false" columns="2" rendered="{!$User.Username=='himanshu_saxena02@infosys.com'}">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel >Requestor Name:</apex:outputLabel> 
+                    <apex:inputField id="requesterName" value="{!case.Requestor_Name__c}" required="true" />                   
+                    
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel >Requestor MUD ID:</apex:outputLabel>                    
+                    <apex:inputField id="requesterMudId" value="{!case.Requester_MUD_ID__c}" required="true" />
+                </apex:pageBlockSectionItem>
+                
+                <apex:pageBlockSectionItem >
+                   <apex:outputLabel >Requestor Email ID:</apex:outputLabel>                    
+                   <apex:inputField id="requesteremaildu" value="{!case.Requester_Email_ID__c}" required="true" />
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel >Department:</apex:outputLabel>                    
+                    <apex:inputField id="department" value="{!case.Department__c}" required="true"/>
+               </apex:pageBlockSectionItem>
+                </apex:pageBlockSection>
+           
+          
+      <!-------------------------------------Second Page Block-------------------------------->
+          <apex:pageBlockSection id="pgBlockSectionRequirementDetails" title="Requirement Details" collapsible="false" columns="2">
+                <apex:pageBlockSectionItem >
+                <apex:actionregion >
+                    <apex:outputLabel >Request Type:</apex:outputLabel> 
+                    <apex:inputField id="requesttype" value="{!case.Request_Type__c}" required="true">                   
+                    <apex:actionSupport event="onchange" reRender="reqdetails,form2"/>
+                </apex:inputField>
+                  </apex:actionregion>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel >Business Unit:</apex:outputLabel>                    
+                    <apex:inputField id="BU" value="{!case.Business_Unit__c}" required="true" />
+                </apex:pageBlockSectionItem>
+                
+                <apex:pageBlockSectionItem >
+                   <apex:outputLabel >Category:</apex:outputLabel> 
+                   <apex:actionregion >                   
+                   <apex:inputField id="catgory" value="{!case.Category__c}" required="true">
+                   <apex:actionSupport event="onchange" reRender="othrcategory"/>
+                </apex:inputField>
+                   </apex:actionregion>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel >Sub category:</apex:outputLabel>
+                    <apex:actionregion >                    
+                    <apex:inputField id="subcat" value="{!case.Sub_category__c}" required="true">
+                    <apex:actionSupport event="onchange" reRender="othrcategory"/>
+                </apex:inputField>
+                   </apex:actionregion>
+               </apex:pageBlockSectionItem>
+               </apex:pageblocksection>
+               
+               <apex:outputPanel id="othrcategory">
+               <apex:pageBlockSection rendered="{!case.Category__c=='Not in the list'}">
+               <apex:pageBlockSectionItem >
+                   <apex:outputLabel >Other Category:</apex:outputLabel>                    
+                   <apex:inputField id="othercatgory" value="{!case.Category_Text__c}" required="true" />
+                </apex:pageBlockSectionItem>
+               
+               <apex:pageBlockSectionItem rendered="{!case.Sub_category__c=='Not in the list'||case.Category__c=='Not in the list'}">
+                    <apex:outputLabel >Other Sub category:</apex:outputLabel>                    
+                    <apex:inputField id="subcat" value="{!case.Sub_category_Text__c}" required="true"/>
+               </apex:pageBlockSectionItem>
+               </apex:pageBlockSection>
+              </apex:outputPanel>
+              
+               <apex:pageBlockSection >
+               <apex:pageBlockSectionItem >
+                    <apex:outputLabel >Proposed Start Date:</apex:outputLabel> 
+                    <apex:inputField id="strtdate" value="{!case.Proposed_Start_Date__c}" required="true" />                   
+                    
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel >Proposed End Date:</apex:outputLabel>                    
+                    <apex:inputField id="enddate" value="{!case.Proposed_End_Date__c}" required="true" />
+                </apex:pageBlockSectionItem>
+                
+                </apex:pageBlockSection>
+       <!------------------------------------Third Section--------------------------------->  
+       <Apex:outputPanel id="reqdetails">
+           <apex:pageBlockSection rendered="{!case.Request_Type__c=='Quick Turnaround'}">
+               <apex:pageBlockSectionItem >
+                    <apex:outputLabel >Requestor details:</apex:outputLabel> 
+                    <apex:inputField id="reqdet" value="{!case.Requestor_details__c}" required="true" />                   
+                    
+                </apex:pageBlockSectionItem>
+            
+       </apex:pageBlockSection>
+       
+       
+       </apex:outputPanel>
+       <!-------------------------------------fourth section-------------------------------------------------------------------->
+        <apex:pageBlockSection id="flowInformation" title="Work Flow information" collapsible="false" columns="2" rendered="{!$User.Username=='himanshu_saxena02@infosys.com'}">
+   
+     <apex:pageBlockSectionItem >
+                <apex:outputLabel >Analyst Name</apex:outputLabel>  
+                 <apex:outputtext id="analystname" value="{!case.Owner.name}"/> 
+       </apex:pageBlockSectionItem>
+       <apex:pageBlockSectionItem >
+                <apex:outputLabel >Request Complexity</apex:outputLabel>                    
+                <apex:inputField id="reqcomplex" value="{!Case.Request_Complexity__c}" />
+       </apex:pageBlockSectionItem>
+       
+       <apex:pageBlockSectionItem >
+                <apex:outputLabel >Actual Start Date</apex:outputLabel>                    
+                <apex:inputField id="strtdate" value="{!Case.Actual_Start_Date__c}" />
+       </apex:pageBlockSectionItem>
+       <apex:pageBlockSectionItem >
+                <apex:outputLabel >Actual End Date</apex:outputLabel>
+                <apex:inputField id="enddate" value="{!Case.Actual_End_Date__c}" />
+       </apex:pageBlockSectionItem>
+       <apex:pageBlockSectionItem >
+                <apex:outputLabel >Status</apex:outputLabel> 
+                <apex:inputField id="customstatus" value="{!Case.Case_Status__c}"/>
+       </apex:pageBlockSectionItem>
+                     <apex:pageBlockSectionItem >
+                <apex:outputLabel >Geography</apex:outputLabel>
+                <apex:inputField id="geography" value="{!Case.Geography__c}" />
+       </apex:pageBlockSectionItem>
+       </apex:pageBlockSection>
+       
+
+       
+       <!----------------------------------------------------------------------------------------------------------------------->
+        </apex:pageBlock>
+         </apex:form>
+       </apex:page>

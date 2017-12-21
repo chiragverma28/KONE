@@ -1,0 +1,5 @@
+<apex:page standardController="Case" extensions="extCtrlRecordtyperedirect"
+action="{!if(objRectype.Name=='Requisition Intervention',null,
+URLFOR($Action.Case.Edit,
+$ObjectType.Case,null,true))}">
+</apex:page>

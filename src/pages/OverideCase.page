@@ -1,0 +1,22 @@
+<apex:page standardController="case" extensions="ctrlOverideCase" action="{!redirect}">
+<head>
+<style type="text/css">
+.btn {
+padding : 5px 3px;
+border : #3f3f3f solid 1px !important ;
+background-color : #F2F2F2 !important ;
+color : #191919 !important ;
+font-weight : bold;
+font-size : 11px !important ;
+font-family : FF-META-WEB-PRO, "MYRIAD PRO", "SEGOE UI", ARIAL, SANS-SERIF;
+width:60px;
+}
+</style>
+</head>
+<!--<span style="color:brown;font-size:small;left-margin:150px;">-->
+<apex:pageMessages ></apex:pageMessages>
+<!--</span>-->
+<apex:form >
+<apex:commandButton id="Back" value="Back" action="{!retPage}" style="margin-left:20px;"/>
+</apex:form>
+</apex:page>
