@@ -9,6 +9,7 @@ List<Candidate__c> Candidate = new List<Candidate__c>();
 
 System.debug(Candidate); 
 
+/* test */
 
 for(Candidate__c can1 : Candidate) {
 
